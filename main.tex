@@ -113,7 +113,7 @@ The idea is to consider the subsector where every entry in $X^i$ is from $\mathb
 \begin{equation}
   X^i_{A B} = a + \ii b, \quad a, b \in \mathbb{Z}_M.
 \end{equation}
-This effectively reduces the BFSS matrix model to a finite state system with $M^{2d N^2}$ states.
+This effectively reduces the BFSS matrix model to a finite state system with $M^{2d N^2}$ states and the corresponding Hilbert space after quantization to a finite-dimensional one.
 
 \subsection{Gauging}
 \paragraph{Unitary groups over $\mathbb{Z}_M[\ii]$.} 
@@ -156,6 +156,48 @@ Some remarks and subcases:
   \]
   Quotienting further by the scalar center yields the \emph{projective special unitary group} $PSU(N,M) := SU(N,M)/Z$.
 \end{itemize}
+
+
+\section{Finite field Quantum Mechanics}
+Consider a particle with position $x$ in a finite lattice with lattice space $a$ and periodic boundary conditions
+\begin{equation}
+  x = \ell a, \quad \ell \in \mathbb{Z}, \qquad x \sim x + 2 \pi R, \quad 2\pi R = M a, \quad M \in \mathbb{Z},
+\end{equation}
+This effectively makes $\ell \in \mathbb{Z}_M$ and the momentum $p$ in the dual lattice
+\begin{equation}
+  p = \frac{2 \pi}{M a} n, \quad n \in \mathbb{Z}_M, \qquad p \sim p + \frac{2 \pi}{a}.
+\end{equation}
+We denote the position basis with $\ket{x_\ell}$ and is such that
+\begin{equation}
+  \bra{x_\ell}\ket{x_{\ell'}} = \delta_{\ell \ell'}, \quad \sum_{\ell \in \mathbb{Z}_M} \ket{x_\ell}\bra{x_\ell} = 1.
+\end{equation}
+We can also construct the momentum basis $\ket{p_n}$ as follows. We know
+\begin{equation}
+  \bra{x_\ell}\ket{p_n} = \mathcal{A} \, e^{\ii p x} = \mathcal{A} \, e^{\ii \frac{2 \pi}{M} \ell n}.
+\end{equation}
+The norm gives us
+\begin{equation}
+  \delta_{n n'} = \bra{p_{n'}} \ket{p_{n'}} = \sum_{\ell \in \mathbb{Z}_M} \bra{p_{n'}}\ket{x_\ell} \bra{x_\ell}\ket{p_n} = \abs{\mathcal{A}}^2 \sum_{\ell} e^{\frac{2\pi \ii}{M} \ell (n - n')} = \abs{\mathcal{A}}^2 \, M \, \delta_{n n'}.
+\end{equation}
+Thus, $\ket{p_n} = \frac{1}{\sqrt{M}} \sum_{\ell} e^{\frac{2\pi\ii}{M} \ell n} \ket{x_\ell}$. We can also work out the momentum operator in the position basis
+\begin{equation}
+  \hat{p} = \sum_{n \in \mathbb{Z}_M} p_n \ket{p_n} \bra{p_n} = \frac{2 \pi}{M^2 a} \, \sum_{n \ell \ell'} \, n  \, \exp(\frac{2 \pi \ii}{M} n (\ell - \ell')) \ket{x_\ell} \bra{x_{\ell'}}.
+\end{equation}
+It is easy to show
+\begin{equation}
+  \sum_{n \in \mathbb{Z}_M} n \exp(\frac{2 \pi \ii}{M} n (\ell - \ell')) = \begin{cases}
+    \frac{M (M-1)}{2} & \ell = \ell', \\
+    \frac{M}{e^{\frac{2\pi\ii}{M} (\ell - \ell')} - 1} & \ell \neq \ell'.
+  \end{cases}
+\end{equation}
+Thus,
+\begin{equation}
+  \hat{p} = \frac{2 \pi}{M a} \Biggl\{ \qty(\tfrac{M-1}{2}) \sum_{\ell} \ket{x_\ell} \bra{x_\ell} \ + \ \sum_{\ell \neq \ell'} \qty(\tfrac{1}{e^{\frac{2\pi\ii}{M} (\ell - \ell')} - 1}) \ket{x_\ell} \bra{x_{\ell'}} \Biggr\}.
+\end{equation}
+We can check this by computing the translation operator
+\begin{equation}
+  \hat{T} = e^{\ii \hat{p} a}
+\end{equation}
 
 
 \printbibliography
