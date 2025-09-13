@@ -68,6 +68,9 @@
 % Tables
 \usepackage{booktabs}
 
+% Colors
+\usepackage{xcolor-material}
+
 % Definitions
 \newcommand{\ii}{\mathrm{i}}
 
@@ -201,6 +204,30 @@ We can check this by computing the translation operator
 \begin{equation}
   \hat{T} = e^{\ii \hat{p} a}
 \end{equation}
+To see that this definition is correct, note that $\hat{p}$ is \href{https://en.wikipedia.org/wiki/Circulant_matrix}{{\color{blue} \textit{circulant}}} in the $\ket{x_\ell}$ basis and is therefore diagonalized by the discrete Fourier states
+\begin{equation}
+  \ket{k} = \frac{1}{\sqrt{M}} \sum_{\ell=0}^{M-1} 
+  e^{\frac{2\pi \ii}{M} k \ell} \ket{x_\ell}, 
+  \qquad k \in \mathbb{Z}_M .
+\end{equation}
+A short calculation shows that
+\begin{equation}
+  \hat{p} \ket{k} = \frac{2\pi}{M a}\, k \ket{k},
+\end{equation}
+so the Fourier modes are momentum eigenstates with equally spaced eigenvalues.  
+Exponentiating gives
+\begin{equation}
+  e^{\ii \hat{p} a} \ket{k} = e^{\frac{2\pi \ii}{M} k} \ket{k}.
+\end{equation}
+But these phases are precisely the eigenvalues of the shift operator $\hat{T}$ defined by
+\begin{equation}
+  \hat{T}\ket{x_\ell} = \ket{x_{\ell+1}}.
+\end{equation}
+Since $\hat{T}$ and $e^{\ii \hat{p} a}$ share the same eigenbasis and spectrum, we conclude that
+\begin{equation}
+  \hat{T} = e^{\ii \hat{p} a}.
+\end{equation}
+
 
 
 \printbibliography
