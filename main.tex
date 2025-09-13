@@ -1,0 +1,163 @@
+\documentclass[10pt, a4paper]{article}
+
+% Fonts
+\usepackage[english]{babel}
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+
+% Math, Physics
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{physics, tensor}
+
+% Margins and spacing
+\usepackage{geometry}
+\geometry{left=25mm, right=25mm, top=30mm, bottom=30mm}
+\usepackage{setspace}
+\singlespacing % or \onehalfspacing or \doublespacing
+
+% Misc
+\usepackage[none]{hyphenat}
+\usepackage[hidelinks]{hyperref}
+\usepackage{cleveref}
+
+% Titles
+\usepackage{titlesec}
+\titleformat
+{\section} % command
+{\sffamily\bfseries\Large} % format
+{\thesection.} % label
+{1ex} % sep
+{} % before-code
+[] % after-code
+
+% Title page
+\usepackage{titling}
+\pretitle{\LARGE\bfseries\sffamily\noindent}
+\posttitle{
+    \par
+    \noindent\makebox[\linewidth]{\rule{\linewidth}{1pt}}
+    \vspace{2ex}
+}
+\preauthor{
+    \par\large\bfseries\sffamily\noindent
+}
+\postauthor{\par}
+\predate{\par\vspace{1ex}}
+\postdate{\par\vspace{2ex}}
+
+% Headers and Footers
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[L]{Title or Section}
+\fancyhead[R]{Page \thepage}
+\fancyfoot[C]{}
+
+% References
+\usepackage[backend=biber, style=numeric-comp, sorting=none]{biblatex}
+\usepackage{csquotes}
+\addbibresource{references/figures.bib}
+\addbibresource{references/papers.bib}
+
+% Figures
+\usepackage{graphicx, float}
+\graphicspath{{figures/}}
+\usepackage{caption}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+
+% Definitions
+\newcommand{\ii}{\mathrm{i}}
+
+\title{Notes on finite-field quantization of BFSS}
+\author{Rishi Raj}
+\date{
+    \noindent\textit{Sorbonne Université, Paris, FR}\\[0.2cm]
+    \href{mailto:rishiraj.1012exp@gmail.com}{\texttt{rishi.raj@sorbonne-universite.fr}}
+}
+
+\numberwithin{equation}{section}
+
+\renewenvironment{abstract}
+ {\par\noindent\textbf{\abstractname}\ \ignorespaces\\[1ex]}
+ {\par\medskip}
+
+\begin{document}
+
+\thispagestyle{empty}
+\maketitle
+
+\begin{abstract}
+  We explore finite field quantization as a discrete framework for studying quantum mechanical and matrix models. 
+  Starting with the finite field quantization of the harmonic oscillator, we extend the construction to the quartic oscillator as a nontrivial interacting example. 
+  We then formulate finite field analogues of the gauged BFSS matrix model, making use of unitary groups over finite rings, and perform numerical simulations to probe their dynamics. 
+  These results provide initial insights into the behaviour of matrix quantum mechanics under finite field regularizations.
+\end{abstract}
+
+\noindent\today
+
+\tableofcontents
+
+\setlength{\parindent}{1ex}
+\setlength{\parskip}{2ex}
+\raggedright
+
+\section{Setup}
+We have the BFSS matrix model consisting of $d$ Hermitian $N \times N$ matrices $X^i$ with the Hamiltonian
+\begin{equation}
+  H = \frac{1}{2} \tr \dot{X}^i \dot{X}^i - \frac{1}{4} \tr \comm{X^i}{X^j} \comm{X^i}{X^j}.
+\end{equation}
+The idea is to consider the subsector where every entry in $X^i$ is from $\mathbb{Z}_M[\ii]$ i.e.
+\begin{equation}
+  X^i_{A B} = a + \ii b, \quad a, b \in \mathbb{Z}_M.
+\end{equation}
+This effectively reduces the BFSS matrix model to a finite state system with $M^{2d N^2}$ states.
+
+\subsection{Gauging}
+\paragraph{Unitary groups over $\mathbb{Z}_M[\ii]$.} 
+Let $M \in \mathbb{Z}_{>0}$ and consider the Gaussian extension ring
+\[
+  \mathbb{Z}_M[\ii] := \{\, a + b \ii \;\;|\;\; a,b \in \mathbb{Z}_M, \; \ii^2 = -1 \,\},
+\]
+equipped with the natural involution (complex conjugation) 
+\[
+  \overline{a+b\ii} = a - b\ii.
+\]
+This makes $\mathbb{Z}_M[\ii]$ into a finite ring with involution.
+
+For $N \in \mathbb{Z}_{>0}$, the group of unitary matrices over $\mathbb{Z}_M[\ii]$ is defined as
+\[
+  U(N,M) \;:=\; \bigl\{\, U \in \mathrm{GL}_N(\mathbb{Z}_M[\ii]) \;\big|\; U^\dagger U = I \,\bigr\},
+\]
+where $U^\dagger = \overline{U}^{\,T}$ denotes the conjugate transpose.
+
+\medskip
+\noindent
+Some remarks and subcases:
+\begin{itemize}
+  \item If $M$ is prime, then $\mathbb{Z}_M \cong \mathbb{F}_p$ is a finite field, and $\mathbb{Z}_M[\ii]$ is a quadratic extension of $\mathbb{F}_p$ (a field if $p \equiv 3 \pmod{4}$, or isomorphic to $\mathbb{F}_p \times \mathbb{F}_p$ if $p \equiv 1 \pmod{4}$). 
+  In the field case, $U(N,M)$ coincides with the classical finite unitary group $U(N,p)$ preserving a Hermitian form over $\mathbb{F}_{p^2}$.
+
+  \item If $M$ is composite, then $\mathbb{Z}_M[\ii]$ is not a field but a finite ring with zero divisors. 
+  By the Chinese remainder theorem, one has a factorization
+  \[
+    \mathbb{Z}_M[\ii] \;\cong\; \prod_j \mathbb{Z}_{p_j^{k_j}}[\ii],
+  \]
+  so correspondingly
+  \[
+    U(N,M) \;\cong\; \prod_j U\!\bigl(N, p_j^{k_j}\bigr).
+  \]
+
+  \item Within $U(N,M)$, one defines the \emph{special unitary group} 
+  \[
+    SU(N,M) := \{\, U \in U(N,M) \;\;|\;\; \det(U) = 1 \,\}.
+  \]
+  Quotienting further by the scalar center yields the \emph{projective special unitary group} $PSU(N,M) := SU(N,M)/Z$.
+\end{itemize}
+
+
+\printbibliography
+
+\end{document}
